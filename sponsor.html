@@ -34,9 +34,9 @@
             -webkit-backdrop-filter: blur(25px) saturate(180%); 
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 30px; 
-            padding: 40px; 
+            padding: 50px 40px; /* 增加了上下内边距，让卡片更大气 */
             box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
-            max-width: 480px; /* 从 420px 改成 480px 或 500px */
+            max-width: 500px; /* 进一步放大卡片最大宽度 */
             width: 100%; 
             text-align: center; 
             position: relative; 
@@ -48,25 +48,25 @@
             to { opacity: 1; transform: translateY(0); } 
         }
 
-        .sponsor-card h2 { font-weight: 700; color: #1d1d1f; margin-bottom: 10px; letter-spacing: -0.02em; }
-        .sponsor-card p { color: #86868b; font-size: 0.95rem; margin-bottom: 30px; line-height: 1.5; }
+        .sponsor-card h2 { font-weight: 700; font-size: 2rem; color: #1d1d1f; margin-bottom: 12px; letter-spacing: -0.02em; }
+        .sponsor-card p { color: #86868b; font-size: 1.05rem; margin-bottom: 30px; line-height: 1.5; }
 
         /* iOS 风格的 Segmented Control (分段控制器) */
         .toggle-container {
             background: rgba(0, 0, 0, 0.05);
             border-radius: 14px;
             display: flex;
-            padding: 4px;
-            margin-bottom: 30px;
+            padding: 5px;
+            margin-bottom: 35px;
             position: relative;
         }
 
         .toggle-btn {
             flex: 1;
-            padding: 10px 0;
+            padding: 12px 0; /* 加高了按钮 */
             border: none;
             background: transparent;
-            font-size: 15px;
+            font-size: 16px; /* 放大了按钮字体 */
             font-weight: 600;
             color: #86868b;
             border-radius: 10px;
@@ -83,9 +83,9 @@
         /* 选中状态的滑块背景 */
         .toggle-bg {
             position: absolute;
-            top: 4px; left: 4px;
-            width: calc(50% - 4px);
-            height: calc(100% - 8px);
+            top: 5px; left: 5px;
+            width: calc(50% - 5px);
+            height: calc(100% - 10px);
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -99,7 +99,7 @@
         /* 二维码展示区 */
         .qr-wrapper {
             background: white;
-            padding: 15px;
+            padding: 20px; /* 增加了白底边框的厚度 */
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             display: inline-block;
@@ -107,29 +107,35 @@
             position: relative;
         }
 
+        /* 核心修复：放大了二维码的尺寸 */
         .qr-code {
-            width: 200px;
-            height: 200px;
+            width: 280px;  /* 从 200px 变更为 280px */
+            height: 280px; /* 从 200px 变更为 280px */
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
             transition: opacity 0.3s ease;
         }
 
         /* 底部感谢语 */
         .thank-you {
-            font-size: 0.85rem;
+            font-size: 0.95rem; /* 放大了提示文字 */
             color: #a1a1a6;
             margin-top: 10px;
         }
 
         .coffee-btn {
-            margin-top: 25px;
+            margin-top: 30px;
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             background: #FFDD00; color: #000; font-weight: 600; text-decoration: none;
-            padding: 12px 24px; border-radius: 20px; font-size: 0.9rem;
+            padding: 14px 28px; border-radius: 25px; font-size: 1rem;
             transition: transform 0.2s, box-shadow 0.2s;
         }
         .coffee-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 221, 0, 0.4); color: #000;}
+        
+        @media (max-width: 500px) {
+            .qr-code { width: 230px; height: 230px; } /* 手机屏幕上稍微缩小，防溢出 */
+            .sponsor-card { padding: 40px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -151,7 +157,7 @@
         </div>
 
         <div class="qr-wrapper">
-            <img id="qr-img" class="qr-code" src="assets/img/qr-wechat.jpg" alt="Scan to tip">
+            <img id="qr-img" class="qr-code" src="img/wechat.jpg" alt="Scan to tip">
         </div>
 
         <div class="thank-you" id="thank-msg">
@@ -167,14 +173,14 @@
         // 配置你的二维码图片路径
         const qrData = {
             wechat: {
-                src: "img/wechat.jpg", // ⚠️ 替换成你的微信收款码路径
+                src: "img/wechat.jpg", 
                 msg: "Scan with WeChat to support",
                 transform: "translateX(0)"
             },
             alipay: {
-                src: "img/alipay.jpg", // ⚠️ 替换成你的支付宝收款码路径
+                src: "img/alipay.jpg", 
                 msg: "Scan with Alipay to support",
-                transform: "translateX(100%)" // 滑块移动到右边
+                transform: "translateX(100%)" 
             }
         };
 
