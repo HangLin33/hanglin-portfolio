@@ -1,0 +1,43 @@
+name: Compress images
+
+on:
+  push:
+    paths:
+      - 'assets/img/**'
+
+permissions:
+  contents: write
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      - name: Resize and compress oversized images
+        run: |
+          find assets/img -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) | while read f; do
+            w=$(identify -format '%w' "$f" 2>/dev/null || echo 0)
+            h=$(identify -format '%h' "$f" 2>/dev/null || echo 0)
+            max=$(( w > h ? w : h ))
+            if [ "$max" -gt 2560 ]; then
+              echo "Resizing $f (was ${w}x${h})"
+              mogrify -resize '2560x2560>' -strip -quality 82 "$f"
+            fi
+          done
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "Auto-compress oversized images"
+            git push
+          else
+            echo "No images needed compression."
+          fi
